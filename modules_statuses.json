@@ -1,0 +1,7 @@
+{
+    "Admin": true,
+    "User": true,
+    "Department": true,
+    "Course": true,
+    "Workflow": true
+}
