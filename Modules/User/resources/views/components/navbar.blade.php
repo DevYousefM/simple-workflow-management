@@ -38,7 +38,36 @@
 
                     </div>
                 </li>
-
+                <li class="nav-notification">
+                    <div class="dropdown-custom">
+                        <a href="javascript:;" class="nav-item-toggle icon-active">
+                            <img class="svg" src="{{ asset('dashboard/img/svg/alarm.svg') }}" alt="img">
+                        </a>
+                        <div class="dropdown-parent-wrapper">
+                            <div class="dropdown-wrapper">
+                                <h2 class="dropdown-wrapper__title">Notifications <span
+                                        class="badge-circle badge-warning ms-1">{{ auth()->user()->unreadNotifications->count() }}</span>
+                                </h2>
+                                <ul>
+                                    @foreach (auth()->user()->unreadNotifications as $i)
+                                        <li class="nav-notification__single nav-notification__single d-flex flex-wrap">
+                                            <div class="nav-notification__details">
+                                                <p>
+                                                    <span>{{ $i->data['message'] }}</span>
+                                                </p>
+                                                <p>
+                                                    <span
+                                                        class="time-posted">{{ $i->created_at->diffForHumans() }}</span>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <a href="" class="dropdown-wrapper__more">See all incoming activity</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                 <li class="nav-author">
                     <div class="dropdown-custom">
                         <a href="javascript:;" class="nav-item-toggle"><img

@@ -5,9 +5,15 @@ namespace Modules\Workflow\Services;
 use Modules\Workflow\Models\Action;
 use Modules\Workflow\Models\Step;
 use Modules\Workflow\Models\Workflow;
+use Modules\Workflow\Notifications\SendNotification;
 
 class WorkflowService
 {
+    protected $notificationService;
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function createWorkflow(array $data, array $steps)
     {
         $workflow = Workflow::create([
@@ -103,6 +109,8 @@ class WorkflowService
                 'status' => 'In Progress',
             ]);
         }
+
+        $this->notifyDepartment($this->notificationService, $next_step->department_id);
     }
     public function handleReject($step, $user_id, $comment = null, $file_path = null)
     {
@@ -129,5 +137,19 @@ class WorkflowService
                 'status' => 'Pending',
             ]);
         }
+
+        $this->notifyUser($this->notificationService, $step->user);
+    }
+    public function notifyDepartment(NotificationService $notificationService, $department_id)
+    {
+        $message = 'There is a new course needs to review';
+        $notification = new SendNotification($message);
+        $notificationService->sendToDepartment($department_id, $notification);
+    }
+    public function notifyUser(NotificationService $notificationService, $user)
+    {
+        $message = 'There is a new course needs to review';
+        $notification = new SendNotification($message);
+        $notificationService->sendToUser($user, $notification);
     }
 }
